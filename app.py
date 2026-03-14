@@ -18,11 +18,10 @@ app.add_url_rule('/logout', 'logout', logout_handler, methods=['POST'])
 def handle_query():
     data = request.get_json() or {}
     query = data.get('query', '')
-    try:
-        result = processor.process(query)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    result = processor.process(query)
+    if 'error' in result:
+        return jsonify(result), 400
+    return jsonify(result)
 
 @app.route('/tables', methods=['GET'])
 @login_required
