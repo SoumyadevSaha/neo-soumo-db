@@ -32,7 +32,7 @@ class DataStore:
     def _parse_where(self, where_clause):
         if not where_clause:
             return None, None, None
-        pattern = r"(\w+)\s*(=|!=|>|<|>=|<=|LIKE)\s*(.+)"
+        pattern = r"(\w+)\s*(>=|<=|!=|=|>|<|LIKE)\s*(.+)"
         m = re.match(pattern, where_clause, re.I)
         if not m:
             raise ValueError(f"Invalid WHERE clause: {where_clause}")
@@ -110,9 +110,9 @@ class DataStore:
             rows = sorted(rows, key=lambda x: x.get(col.lower()), reverse=reverse)
 
         # Pagination
-        if offset:
+        if offset is not None:
             rows = rows[offset:]
-        if limit:
+        if limit is not None:
             rows = rows[:limit]
 
         # Projection
